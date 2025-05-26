@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+
+  app:
+    build:
+      args:
+        user: user
+        uid: 1000
+      context: ./docker-compose
+      dockerfile: php.Dockerfile
+    image: deisngpatterns_docker
+    container_name: deisngpatterns_docker_app
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/_logs:/var/log
+    networks:
+      - designpatterns_network
+
+  composer:
+    container_name: doctrine_docker_composer
+    build:
+      context: docker-compose
+      dockerfile: composer.Dockerfile
+    volumes:
+      - ./:/var/www
+    networks:
+      - designpatterns_network
+
+networks:
+  designpatterns_network:
+    driver: bridge
